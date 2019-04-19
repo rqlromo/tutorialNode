@@ -39,25 +39,7 @@ fs.writeFile(__dirname + '/data/database.json', JSON.stringify(adalaber), functi
 
 
 
-
 // Usamos el método app.listen para escuchar por el puerto. Este método necesita dos argumentos: un puerto y una función callback (de respuesta) que indica qué hacer una vez que el servidor esté funcionando.
 app.listen(3000, function () {
   console.log('Server is listening on port 3000!!');
 });
-
-
-
-
-
-
-// // use res.render to load up an ejs view file
-
-// // index page 
-// app.get("/", function (req, res) {
-//   res.render('main')
-// });
-
-// // otro page 
-// app.get('/otro', function(req, res) {
-//   res.render('otro', {name: 'raquel'});
-// });
