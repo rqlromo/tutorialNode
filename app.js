@@ -5,6 +5,7 @@ var express = require('express');
 var app = express();
 
 
+
 //con esto indicamos donde estan los ficheros estaticos
 app.use(express.static(__dirname + '/'));
 
