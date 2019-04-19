@@ -12,5 +12,9 @@
     "ejs"
   ],
   "author": "Raquel RomoGO",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
 }
+
