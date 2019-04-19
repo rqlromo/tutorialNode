@@ -13,9 +13,24 @@ app.use(express.static(__dirname + '/'));
 app.set('view engine', 'ejs');
 
 
+// Para poder acceder al body y recuperar los datos ntroducidos en un formulario hay que instalar body_parser, los datos del formulario los encontraremos en el body con la clave name que hayamos indicado
+var body_parser = require('body-parser');
+app.use(body_parser.urlencoded({extended:true}));
+
+
 // utilizamos render para visualizar el fichero ejs que deseemos
 app.get("/htmlDinamic", function (req, res) {
-  res.render('htmlDinamic', {name: 'Colega'})
+  res.render('htmlDinamic')
+});
+
+
+app.post("/resPost", function (req, res) {
+console.log(req.body)
+
+  res.render('recoverInputs',{
+    name: req.body.name, 
+    surname: req.body.surname,
+  })
 });
 
 
