@@ -7,7 +7,14 @@
   <title>sendFile</title>
 </head>
 <body>
-  <h1>Hola Mundo</h1>
-  <p>Soy un html y aqui ando...</p>
+  <main>
+    <h1>Hola Mundo</h1>
+    <p>Soy un html y aqui ando...</p>
+  
+    <!-- Para poder utilizar un método post en el servidor tendremos que hacer que realmente sea un post, esto se puede hacer incluyendo un botón en nuestro html que al pulsar envíe el formulario -->
+    <form action="/resPost" method="post">
+      <button class="btn" type="submit">Enviar post</button>
+    </form>
+  </main>
 </body>
 </html>
