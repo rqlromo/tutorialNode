@@ -17,26 +17,57 @@ app.use(body_parser.urlencoded({extended:true}));
 // sirve para escribir en un fichero almacenado en el disco duro de mi ordenador
 var fs = require('fs'); 
 
-
-// Para leer un fichero utilizamos readFile, le pasamos la ruta del archivo que que queremos leer, necesitamos convertir de formato Json a objeto javascript
-fs.readFile(__dirname + '/data/database.json', function (error, file) {    
-  var parsedFile = JSON.parse(file);
-  console.log('parsed File',parsedFile);
+// form page 
+app.get("/", function (req, res) {
+  res.render('mainPage')
 });
 
 
-var adalaber = {
-  "name": "Raquel",
-  "age": 26,
-  "isMarried": false
-}
+app.post("/userData", function (req, res) {
+
+  fs.readFile(__dirname + '/data/users-and-directions.json', function (error, file) {  
+    var users = JSON.parse(file);
+
+    if (users.users.includes(req.body.name)) {
 
 
-// Para escribir un fichero utilizamos writeFile, le pasamos la ruta del archivo que que queremos escribir y el contenido a escribir, necesitamos convertir de formato objeto javascript a Json
-fs.writeFile(__dirname + '/data/database.json', JSON.stringify(adalaber), function (error) {
-  console.log(error)
+      fs.readFile(__dirname + '/data/continue-steps.json', function (error, file) {    
+        const recoveredDirections = JSON.parse(file);
+
+          if(recoveredDirections.dones[req.body.name] === 0) {
+            response = req.body.name;
+            direction = 'Debes ' + users.directions[req.body.name][0];
+      
+            const stepsDone = {
+              dones:{},
+            };
+            var array = [];
+            array.push(users.directions[req.body.name][0]);
+            stepsDone.dones[req.body.name] = array;
+      
+            fs.writeFile(__dirname + '/data/continue-steps.json', JSON.stringify(stepsDone), function (error) {     console.log(error)
+            });
+      
+          } else {
+            response = req.body.name;
+            direction = recoveredDirections.dones[req.body.name];
+      
+          }
+          res.render('instructions',{
+            response: 'Yo te ayudare a llegar a casa ' + response, 
+            direction: direction,
+          })
+      });
+
+    } else {
+      res.render('instructions',{
+        response: 'El usuario no existe', 
+        direction: '',
+      })
+    }
+  });
+
 });
-
 
 
 // Usamos el método app.listen para escuchar por el puerto. Este método necesita dos argumentos: un puerto y una función callback (de respuesta) que indica qué hacer una vez que el servidor esté funcionando.
