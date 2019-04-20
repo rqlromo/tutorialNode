@@ -40,30 +40,6 @@ app.post("/userData", function (req, res) {
     })
   };
 
-  // if(givenUserHasData) {
-  //   console.log('recoveredDirections.dones[req.body.name]',recoveredDirections.dones[req.body.name])
-
-  //   response = req.body.name;
-  //   direction = recoveredDirections.dones[req.body.name];
-
-  //   recoveredDirections.dones[req.body.name].push('vete a la playa');
-
-  //   console.log('recoveredDirections',recoveredDirections)
-  // } else {
-  //   response = req.body.name;
-  //   direction = 'Debes ' + users.directions[req.body.name][0];
-
-  //   const stepsDone = {
-  //     dones:{},
-  //   };
-  //   var array = [];
-  //   array.push(users.directions[req.body.name][0]);
-  //   stepsDone.dones[req.body.name] = array;
-
-  //   fs.writeFile(__dirname + '/data/continue-steps.json', JSON.stringify(stepsDone), function (error) {     console.log(error)
-  //   });
-  // }
-
   const recoverCurrentInstruction = personData => {
     return personData.instructions[personData.currentInstruction];
   };
@@ -73,9 +49,6 @@ app.post("/userData", function (req, res) {
 
     return personData;
   }
-
-  // const recoveredDirections = JSON.parse(file);
-  // const givenUserHasData = recoveredDirections.dones[req.body.name] === undefined;
 
   const renderInstruction = (currentInstruction, personName) => {
     res.render('instructions', {
