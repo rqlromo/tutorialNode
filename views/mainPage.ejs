@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="../static/main.css"  rel="stylesheet">
+  <title>mainPage</title>
+</head>
+<body>
+
+  <main>
+    <h1>Bienvenido!!</h1>
+  
+    <!-- Para poder utilizar un método post en el servidor tendremos que hacer que realmente sea un post, esto se puede hacer incluyendo un botón en nuestro html que al pulsar envíe el formulario -->
+    <div>
+      <form action="/userData" method="post">
+        <label for="name">Nombre</label>
+        <input id="name" type="text" name="name">
+        <button class="btn" type="submit">Iniciar sesión</button>
+      </form>
+      <img src="../static/images/leprechaun.jpeg" alt="">
+    </div>
+
+  </main>
+</body>
+</html>
