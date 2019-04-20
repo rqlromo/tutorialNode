@@ -95,6 +95,12 @@ app.post("/userData", function (req, res) {
     return peopleData;
   }
 
+  const updatePeopleDataInDB = peopleData => {
+    fs.writeFile(__dirname + '/data/users-and-directions.json', JSON.stringify(peopleData), function (error){
+      console.log(error)
+    });
+  }
+
   // TODO: Estamos asumiendo que toda persona que existe en la bbdd tiene instrucciones
   fs.readFile(__dirname + '/data/users-and-directions.json', function (error, file) {  
     let peopleData = JSON.parse(file);
@@ -102,7 +108,7 @@ app.post("/userData", function (req, res) {
     const personHasInstructions = personData !== undefined;
 
     if (personHasInstructions) {
-    const personHasArrivedHome = (personData.instructions.length - 1) === personData.currentInstruction;
+    const personHasArrivedHome = (personData.instructions.length) === personData.currentInstruction;
 
       if (personHasArrivedHome) {
         renderCongratsMsg();
@@ -110,7 +116,7 @@ app.post("/userData", function (req, res) {
         giveInstruction(personData, req.body.name);
         personData = updateCurrentInstruction(personData);
         peopleData = updatePeopleData(peopleData, personData, req.body.name);
-        // updatePeopleDataInDB(peopleData);
+        updatePeopleDataInDB(peopleData);
       }
     } else {
       renderPersonHasNoInstructions();
