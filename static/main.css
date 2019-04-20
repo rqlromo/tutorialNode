@@ -35,8 +35,6 @@ button {
   padding: 0;
 }
 
-
-
 .btn {
   background-color: hotpink;
   border-radius: 4px;
@@ -51,4 +49,25 @@ button {
   align-items: center;
   padding-right: 24px;
   padding-left: 24px;
+  margin: 20px 0;
+}
+
+input[type="text"] {
+  background-color: transparent;
+  border: 1px solid lightgreen;
+  border-radius: 4px;
+  height: 30px;
+  font-weight: 500;
+  font-size: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+label {
+  padding-bottom: 10px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
 }
