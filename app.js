@@ -1,4 +1,3 @@
-import { log } from "util";
 
 //necesitamos incluir la dependencia de express para poder usar sus métodos. En NodeJs, cuando quieres acceder a las funcionalidades de una librería o módulo de otro archivo, tienes que requerirlo.
 var express = require('express');
@@ -101,19 +100,17 @@ app.post("/userData", function (req, res) {
     let peopleData = JSON.parse(file);
     let personData = peopleData[req.body.name];
     const personHasInstructions = personData !== undefined;
-    const personHasArrivedHome = (personData.instructions.length - 1) === personData.currentInstruction;
-
-    console.log('personData',personData);
-    console.log('personHasInstructions',personHasInstructions);
 
     if (personHasInstructions) {
+    const personHasArrivedHome = (personData.instructions.length - 1) === personData.currentInstruction;
+
       if (personHasArrivedHome) {
         renderCongratsMsg();
       } else {
         giveInstruction(personData, req.body.name);
         personData = updateCurrentInstruction(personData);
         peopleData = updatePeopleData(peopleData, personData, req.body.name);
-        updatePeopleDataInDB(peopleData);
+        // updatePeopleDataInDB(peopleData);
       }
     } else {
       renderPersonHasNoInstructions();
