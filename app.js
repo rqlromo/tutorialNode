@@ -23,8 +23,8 @@ app.get("/", function (req, res) {
   res.render('mainPage')
 });
 
-const updatePeopleDataInDB = peopleData => {
-  fs.writeFile(__dirname + '/data/users-and-directions.json', JSON.stringify(peopleData), function (error){
+const updatePeopleDataInDB = db => {
+  fs.writeFile(__dirname + '/data/users-and-directions.json', JSON.stringify(db), function (error){
     console.log('error',error)
   });
 }
@@ -69,18 +69,19 @@ const instructionsFlow = (req, res) => {
     renderInstruction(currentInstruction, personName);
   }
 
-  const updatePeopleData = (peopleData, personData, personName) => {
-    peopleData[personName] = personData;
+  const updatePeopleData = (db, personData, personName) => {
+    db.peopleData[personName] = personData;
     
-    return peopleData;
+
+    return db;
   }
 
 
 
   // TODO: Estamos asumiendo que toda persona que existe en la bbdd tiene instrucciones
   fs.readFile(__dirname + '/data/users-and-directions.json', function (error, file) {  
-    let peopleData = JSON.parse(file);
-    let personData = peopleData[req.body.name];
+    let db = JSON.parse(file);
+    let personData = db.peopleData[req.body.name];
     const personHasInstructions = personData !== undefined;
 
     if (personHasInstructions) {
@@ -91,8 +92,8 @@ const instructionsFlow = (req, res) => {
       } else {
         giveInstruction(personData, req.body.name);
         personData = updateCurrentInstruction(personData);
-        peopleData = updatePeopleData(peopleData, personData, req.body.name);
-        updatePeopleDataInDB(peopleData);
+        db = updatePeopleData(db, personData, req.body.name);
+        updatePeopleDataInDB(db);
       }
     } else {
       renderPersonHasNoInstructions();
