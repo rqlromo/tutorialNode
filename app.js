@@ -18,13 +18,20 @@ app.use(body_parser.urlencoded({extended:true}));
 // sirve para escribir en un fichero almacenado en el disco duro de mi ordenador
 var fs = require('fs'); 
 
-// form page 
+
 app.get("/", function (req, res) {
   res.render('mainPage')
 });
 
+const updatePeopleDataInDB = peopleData => {
+  fs.writeFile(__dirname + '/data/users-and-directions.json', JSON.stringify(peopleData), function (error){
+    console.log('error',error)
+  });
+}
 
-app.post("/userData", function (req, res) {
+const instructionsFlow = (req, res) => {
+
+  console.log('req.body.name',req.body.name)
 
   const renderPersonHasNoInstructions = () => {
     res.render('instructions',{
@@ -68,11 +75,7 @@ app.post("/userData", function (req, res) {
     return peopleData;
   }
 
-  const updatePeopleDataInDB = peopleData => {
-    fs.writeFile(__dirname + '/data/users-and-directions.json', JSON.stringify(peopleData), function (error){
-      console.log(error)
-    });
-  }
+
 
   // TODO: Estamos asumiendo que toda persona que existe en la bbdd tiene instrucciones
   fs.readFile(__dirname + '/data/users-and-directions.json', function (error, file) {  
@@ -94,6 +97,25 @@ app.post("/userData", function (req, res) {
     } else {
       renderPersonHasNoInstructions();
     }
+  });
+}
+
+
+app.post("/userData", instructionsFlow);
+
+app.post("/selectPerson", function(req, res){
+
+  const updatePersonSelected = (db, personName) => {
+    db.currentPerson = personName;
+    
+    return db;
+  }
+  
+  fs.readFile(__dirname + '/data/users-and-directions.json', function (error, file) {  
+    let db = JSON.parse(file);
+
+    db = updatePersonSelected(db, req.body.name);
+    updatePeopleDataInDB(db);
   });
 
 });
