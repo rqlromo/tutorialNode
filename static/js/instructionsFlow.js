@@ -5,14 +5,14 @@ const instructionsFlow = (req, res) => {
   const renderPersonHasNoInstructions = () => {
     res.render('instructions',{
       response: 'El usuario no existe', 
-      direction: '',
+      show: false,
     })
   };
 
   const renderCongratsMsg = () => {
     res.render('instructions',{
       response: 'Enhorabuena! Has llegado a casa sano y salvo!', 
-      direction: '',
+      show: false,
     })
   };
 
@@ -30,6 +30,7 @@ const instructionsFlow = (req, res) => {
     res.render('instructions', {
       response: 'Yo te ayudare a llegar a casa ' + personName, 
       direction: currentInstruction,
+      show: true,
     });
   }
 

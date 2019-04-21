@@ -9,11 +9,22 @@
 <body>
   <main>
     <h1><%= response %></h1>
-    <p><%= direction %></p>
-    <img src="../static/images/well-done.jpeg" alt="">
-    <form action="/give-instructions" method="post">
-      <button class="btn" type="submit">Continua</button>
-    </form>
+
+    <% if (show === true) { %>
+      <img src="../static/images/leprechaun.jpeg" alt="">
+    <% } else {%>
+      <img src="../static/images/well-done.jpeg" alt="">
+    <% } %>
+
+    <% if (show === true) { %>
+      <p><%= direction %></p>
+    <% } %>
+
+    <% if (show === true) { %>
+      <form action="/give-instructions" method="post">
+        <button class="btn" type="submit">Continua!</button>
+      </form>
+    <% } %>
   </main>
 </body>
 </html>
