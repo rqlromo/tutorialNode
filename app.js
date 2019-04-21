@@ -23,15 +23,7 @@ app.get("/", function (req, res) {
   res.render('mainPage')
 });
 
-const updatePeopleDataInDB = db => {
-  fs.writeFile(__dirname + '/data/users-and-directions.json', JSON.stringify(db), function (error){
-    console.log('error',error)
-  });
-}
-
 const instructionsFlow = (req, res) => {
-
-  console.log('req.body.name',req.body.name)
 
   const renderPersonHasNoInstructions = () => {
     res.render('instructions',{
@@ -69,19 +61,24 @@ const instructionsFlow = (req, res) => {
     renderInstruction(currentInstruction, personName);
   }
 
-  const updatePeopleData = (db, personData, personName) => {
+  const updatePeopleDataInDb = (db, personData, personName) => {
     db.peopleData[personName] = personData;
     
-
     return db;
   }
 
+  const updateDb = db => {
+    fs.writeFile(__dirname + '/data/users-and-directions.json', JSON.stringify(db), function (error){
+      
+      console.log('error',error)
+    });
+  }
 
 
   // TODO: Estamos asumiendo que toda persona que existe en la bbdd tiene instrucciones
   fs.readFile(__dirname + '/data/users-and-directions.json', function (error, file) {  
     let db = JSON.parse(file);
-    let personData = db.peopleData[req.body.name];
+    let personData = db.peopleData[db.currentPerson];
     const personHasInstructions = personData !== undefined;
 
     if (personHasInstructions) {
@@ -90,10 +87,10 @@ const instructionsFlow = (req, res) => {
       if (personHasArrivedHome) {
         renderCongratsMsg();
       } else {
-        giveInstruction(personData, req.body.name);
+        giveInstruction(personData, db.currentPerson);
         personData = updateCurrentInstruction(personData);
-        db = updatePeopleData(db, personData, req.body.name);
-        updatePeopleDataInDB(db);
+        db = updatePeopleDataInDb(db, personData, db.currentPerson);
+        updateDb(db);
       }
     } else {
       renderPersonHasNoInstructions();
@@ -102,21 +99,29 @@ const instructionsFlow = (req, res) => {
 }
 
 
-app.post("/userData", instructionsFlow);
+app.post("/give-instructions", instructionsFlow);
 
-app.post("/selectPerson", function(req, res){
+app.post("/select-person", function(req, res){
 
   const updatePersonSelected = (db, personName) => {
     db.currentPerson = personName;
     
     return db;
   }
+
+  const updateDbAndRunInstructionsFlow = (db, req, res) => {
+    fs.writeFile(__dirname + '/data/users-and-directions.json', JSON.stringify(db), function (error){
+      instructionsFlow(req, res);
+      if (error) {
+        console.log('error',error);
+      }
+    });
+  }
   
   fs.readFile(__dirname + '/data/users-and-directions.json', function (error, file) {  
     let db = JSON.parse(file);
-
     db = updatePersonSelected(db, req.body.name);
-    updatePeopleDataInDB(db);
+    updateDbAndRunInstructionsFlow(db, req, res);
   });
 
 });
